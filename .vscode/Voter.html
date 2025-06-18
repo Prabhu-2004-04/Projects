@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+             margin: 20px;
+        }
+        form {
+             max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+</style>
+</head>
+<body>
+    <h1>Voting Eligibility Form</h1>
+    <form id="votingForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="age">Age:</label>
+        <input type="number" id="age" required>
+        <label for="nationality">Nationality:</label>
+        <input type="text" id="nationality" required>
+        <button type="button" onclick="checkEligibility()">Check Eligibility</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        function checkEligibility() {
+        const name = document.getElementById('name').value;
+        const age = parseInt(document.getElementById('age').value);
+        const nationality = document.getElementById('nationality').value.toLowerCase();
+        let result = document.getElementById('result');
+        if (age >= 18 && nationality === 'indian') {
+            result.textContent = `${name}, you are eligible to vote!`;
+            result.style.color = 'green';
+        }
+        else {
+        result.textContent = `${name}, you are not eligible to vote.`;
+        result.style.color = 'red';
+        }
+    }
+    </script>
+</body>
+</html>

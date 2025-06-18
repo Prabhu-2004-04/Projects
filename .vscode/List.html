@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        *{
+            color: rgb(207, 199, 199) !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>TO DO LIST</h1>
+    <input type="text" id="inputText" placeholder="Enter text here" ><br></input>
+    <br>
+    <button onclick="addItem()">Add  Task</button>
+    <button onclick="clearList()">Clear</button>
+    <ol id="itemList"></ol>
+    
+    <script>
+        function addItem() {
+            var input = document.getElementById("inputText");
+            var text = input.value.trim();
+            if (text !== "") {
+                var list = document.getElementById("itemList");
+                var listItem = document.createElement("li");
+                listItem.textContent = text;
+                list.appendChild(listItem);
+                input.value = ""; 
+            }
+        }
+        
+        function clearList() {
+            document.getElementById("itemList").innerHTML = "";
+        }
+    </script>
+</body>
+</html>

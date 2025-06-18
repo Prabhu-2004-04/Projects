@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitality Management System</title>
+    <link rel="stylesheet" href="style1.css">
+    
+</head>
+<body>
+    <h1>Welcome to Our Hospitality Management System</h1>
+    <div class="container">
+        <h2>Available Rooms</h2>
+        <div id="rooms"></div>
+        
+        <h2>Book a Room</h2>
+        <form id="bookingForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <select id="roomType">
+                <option value="Deluxe">Deluxe - $100</option>
+                <option value="Standard">Standard - $70</option>
+            </select>
+            <input type="date" id="checkin" required>
+            <input type="date" id="checkout" required>
+            <button type="submit">Book Now</button>
+        </form>
+        
+        <h2>Reservations</h2>
+        <div id="reservations"></div>
+    </div>
+    
+    <script>
+        class Room {
+            constructor(id, type, price) {
+                this.id = id;
+                this.type = type;
+                this.price = price;
+            }
+        }
+        
+        const rooms = [
+            new Room(1, "Deluxe", 100),
+            new Room(2, "Standard", 70)
+        ];
+        
+        // Function to display available rooms
+        function displayRooms() {
+            console.log("Displaying available rooms...");
+            const roomContainer = document.getElementById("rooms");
+            roomContainer.innerHTML = ""; 
+        
+            rooms.forEach(room => {
+                console.log("Adding room:", room);
+                const div = document.createElement("div");
+                div.className = "room";
+                div.innerHTML = `<strong>${room.type}</strong> - $${room.price} per night`;
+                roomContainer.appendChild(div);
+            });
+        }
+        
+        // Function to get reservations from local storage
+        function getReservations() {
+            const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+            console.log("Retrieved Reservations from Storage:", reservations);
+            return reservations;
+        }
+        
+        // Function to save reservations to local storage
+        function saveReservations(reservations) {
+            console.log("Saving Reservations to Local Storage:", reservations);
+            localStorage.setItem("reservations", JSON.stringify(reservations));
+        }
+        
+        // Function to display reservations
+        function displayReservations() {
+            console.log("Displaying reservations...");
+            const reservationContainer = document.getElementById("reservations");
+            reservationContainer.innerHTML = ""; 
+        
+            const reservations = getReservations();
+            
+            if (reservations.length === 0) {
+                console.log("No reservations found.");
+            }
+        
+            reservations.forEach(reservation => {
+                console.log("Adding reservation to page:", reservation);
+                const div = document.createElement("div");
+                div.className = "reservation";
+                div.innerHTML = `<strong>${reservation.name}</strong> booked a <strong>${reservation.roomType}</strong> room from ${reservation.checkin} to ${reservation.checkout}`;
+                reservationContainer.appendChild(div);
+            });
+        }
+        
+        // Function to handle form submission
+        function handleBooking(event) {
+            event.preventDefault();
+        
+            const name = document.getElementById("name").value.trim();
+            const roomType = document.getElementById("roomType").value;
+            const checkin = document.getElementById("checkin").value;
+            const checkout = document.getElementById("checkout").value;
+        
+            if (!name) {
+                alert("Please enter your name.");
+                return;
+            }
+        
+            const checkinDate = new Date(checkin);
+            const checkoutDate = new Date(checkout);
+            const today = new Date();
+        
+            if (checkinDate < today.setHours(0, 0, 0, 0)) {
+                alert("Check-in date cannot be in the past.");
+                return;
+            }
+        
+            if (checkinDate >= checkoutDate) {
+                alert("Check-out date must be after check-in date.");
+                return;
+            }
+        
+            const newReservation = { name, roomType, checkin, checkout };
+            console.log("New reservation being added:", newReservation);
+        
+            const reservations = getReservations();
+            reservations.push(newReservation);
+            saveReservations(reservations);
+        
+            alert("Room booked successfully!");
+            document.getElementById("bookingForm").reset();
+            displayReservations();
+        }
+        
+        // Initialize the page
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("Page Loaded. Initializing...");
+            displayRooms();
+            displayReservations();
+            document.getElementById("bookingForm").addEventListener("submit", handleBooking);
+        
+            console.log("Initial Reservations on Load:", getReservations());
+        });
+        
+    </script>      
+</body>
+</html>
